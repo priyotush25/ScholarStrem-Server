@@ -100,6 +100,29 @@ function generateUserId() {
 
 
 
+app.post("/users", async (req, res) => {
+  const user = req.body;
+  user.role = "student";
+  user.createdAt = new Date();
+
+  const exist = await userCollection.findOne({ email: user.email });
+  if (exist) return res.send({ message: "user exist" });
+
+  const result = await userCollection.insertOne(user);
+  res.send(result);
+});
+
+app.get("/users", async (req, res) => {
+  const result = await userCollection.find().toArray();
+  res.send(result);
+});
+
+app.get("/users/:email", verifyFirebaseToken, async (req, res) => {
+  const result = await userCollection.findOne({ email: req.params.email });
+  res.send(result);
+});
+
+
 app.get("/", (req, res) => {
   res.send("Scholar Stream Server");
 });
