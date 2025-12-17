@@ -74,6 +74,32 @@ const verifyModerator = async (req, res, next) => {
 
 
 
+
+
+
+const crypto = require("crypto");
+
+function generateUserId() {
+  const prefix = "SS";
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const random = crypto.randomBytes(1).toString("hex").toUpperCase();
+  return `${prefix}-${date}-${random}`;
+}
+
+
+
+const crypto = require("crypto");
+
+function generateUserId() {
+  const prefix = "SS";
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const random = crypto.randomBytes(1).toString("hex").toUpperCase();
+  return `${prefix}-${date}-${random}`;
+}
+
+
+
+
 app.get("/", (req, res) => {
   res.send("Scholar Stream Server");
 });
