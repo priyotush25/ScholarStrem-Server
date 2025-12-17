@@ -139,6 +139,26 @@ app.get("/scholarships/:id", verifyFirebaseToken, async (req, res) => {
 });
 
 
+
+
+
+
+app.post("/apply-scholarships", verifyFirebaseToken, async (req, res) => {
+  const data = req.body;
+  data.userId = generateUserId();
+  data.applicationDate = new Date();
+
+  const result = await applicationsCollection.insertOne(data);
+  res.send(result);
+});
+
+
+
+
+
+
+
+
 app.get("/", (req, res) => {
   res.send("Scholar Stream Server");
 });
