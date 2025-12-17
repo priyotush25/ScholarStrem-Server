@@ -54,6 +54,23 @@ const verifyFirebaseToken = async (req, res, next) => {
 };
 
 
+const verifyAdmin = async (req, res, next) => {
+  const email = req.decoded_email;
+  const user = await userCollection.findOne({ email });
+  if (!user || !["admin", "super-admin"].includes(user.role)) {
+    return res.status(403).send({ message: "Forbidden access" });
+  }
+  next();
+};
+
+const verifyModerator = async (req, res, next) => {
+  const email = req.decoded_email;
+  const user = await userCollection.findOne({ email });
+  if (!user || !["moderator", "super-admin"].includes(user.role)) {
+    return res.status(403).send({ message: "Forbidden access" });
+  }
+  next();
+};
 
 
 
