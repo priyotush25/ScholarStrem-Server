@@ -139,6 +139,31 @@ app.get("/scholarships/:id", verifyFirebaseToken, async (req, res) => {
 });
 
 
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
+
+app.post("/scholarship-payment-checkout", async (req, res) => {
+  const info = req.body;
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    mode: "payment",
+    customer_email: info.studentEmail,
+    line_items: [
+      {
+        price_data: {
+          currency: "USD",
+          unit_amount: parseInt(info.charge) * 100,
+          product_data: { name: info.universityName },
+        },
+        quantity: 1,
+      },
+    ],
+    success_url: `${process.env.SITE_URL}/payment-success`,
+    cancel_url: `${process.env.SITE_URL}/payment-cancelled`,
+  });
+
+  res.send({ url: session.url });
+});
 
 
 
