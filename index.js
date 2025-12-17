@@ -123,6 +123,22 @@ app.get("/users/:email", verifyFirebaseToken, async (req, res) => {
 });
 
 
+
+app.post("/scholarships", verifyFirebaseToken, verifyAdmin, async (req, res) => {
+  const data = req.body;
+  data.createdAt = new Date();
+  const result = await scholarshipsCollection.insertOne(data);
+  res.send(result);
+});
+
+app.get("/scholarships/:id", verifyFirebaseToken, async (req, res) => {
+  const result = await scholarshipsCollection.findOne({
+    _id: new ObjectId(req.params.id),
+  });
+  res.send(result);
+});
+
+
 app.get("/", (req, res) => {
   res.send("Scholar Stream Server");
 });
