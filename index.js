@@ -166,6 +166,12 @@ app.post("/scholarship-payment-checkout", async (req, res) => {
 });
 
 
+app.patch("/payment-success", verifyFirebaseToken, async (req, res) => {
+  const payment = req.body;
+  payment.paidAt = new Date();
+  const result = await paymentCollection.insertOne(payment);
+  res.send(result);
+});
 
 
 app.post("/apply-scholarships", verifyFirebaseToken, async (req, res) => {
